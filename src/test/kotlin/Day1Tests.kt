@@ -1,27 +1,22 @@
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-const val debug = false
-
-fun pairThatSumsTo2020(input: List<Int>): Pair<Int, Int> =
-    input.flatMapIndexed { i, a ->
-        input.drop(i + 1).map { b ->
-            if (debug) console.log("[$a to $b] (${a+b}) \n")
-            a to b
-        }
-    }.first { it.first + it.second == 2020 }
+fun pairThatSumsTo2020(input: List<Int>): Pair<Int, Int> = input.allPairs().first { it.first + it.second == 2020 }
 
 fun tripleThatSumsTo2020(input: List<Int>): Triple<Int, Int, Int> =
-    input.flatMapIndexed { i, a ->
-        input.drop(i + 1).flatMapIndexed { j, b ->
-            input.drop(j + 1).map { c ->
-                if (debug) console.log("[$a, $b, $c] (${a+b+c}) \n")
-                Triple(a, b, c)
-            }
-        }
-    }.first { it.first + it.second + it.third == 2020 }
+    input.allTriples().first { it.first + it.second + it.third == 2020 }
 
-fun parseInput(input: String): List<Int> = input.split("\n").map { it.toInt() }
+fun List<Int>.allPairs(): List<Pair<Int, Int>> = flatMapIndexed { i, a -> drop(i + 1).map { b -> a to b } }
+
+fun List<Int>.allTriples(): List<Triple<Int, Int, Int>> = flatMapIndexed { i, a ->
+    drop(i + 1).flatMapIndexed { j, b ->
+        drop(j + 1).map { c ->
+            Triple(a, b, c)
+        }
+    }
+}
+
+fun String.parseInts(): List<Int> = split("\n").map(String::toInt)
 
 class Day1Tests {
     @Test
@@ -35,7 +30,7 @@ class Day1Tests {
 
     @Test
     fun testInput() {
-        val input = parseInput(day1)
+        val input = day1.parseInts()
         val pair = pairThatSumsTo2020(input)
         val triple = tripleThatSumsTo2020(input)
         assertEquals(357504, pair.first * pair.second)
