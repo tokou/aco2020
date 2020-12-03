@@ -1,5 +1,5 @@
 plugins {
-    kotlin("js") version "1.4.20"
+    kotlin("jvm") version "1.4.20"
 }
 
 group = "com.github.tokou"
@@ -12,26 +12,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test-js"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html:0.7.2")
+    testImplementation(kotlin("test-junit"))
 }
 
 kotlin {
-    js(IR) {
-        browser {
-            binaries.executable()
-            webpackTask {
-                cssSupport.enabled = true
-            }
-            runTask {
-                cssSupport.enabled = true
-            }
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    webpackConfig.cssSupport.enabled = true
-                }
-            }
-        }
-    }
 }
