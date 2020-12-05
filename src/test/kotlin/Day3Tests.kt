@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class Day3Tests {
 
-    private val slopes = listOf(1 to 1, 1 to 3, 1 to 5, 1 to 7, 2 to 1)
+    private val slopes = listOf(1 to 1, 3 to 1, 5 to 1, 7 to 1, 1 to 2)
 
     @Test
     fun testExamples() {
