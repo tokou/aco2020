@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.20"
+    kotlin("multiplatform") version "1.4.20"
 }
 
 group = "com.github.tokou"
@@ -11,9 +11,43 @@ repositories {
     maven { url = uri("https://dl.bintray.com/kotlin/kotlinx") }
 }
 
-dependencies {
-    testImplementation(kotlin("test-junit"))
-}
-
 kotlin {
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+        withJava()
+    }
+    js(LEGACY) {
+        browser {
+            binaries.executable()
+            testTask {
+                isEnabled = false // Disable JS tests until we find a way to load test resources
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
+    }
+    sourceSets {
+        val commonMain by getting
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
+        val jvmMain by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+            }
+        }
+        val jsMain by getting
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+    }
 }

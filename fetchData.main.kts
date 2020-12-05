@@ -31,6 +31,6 @@ val url = URL("https://adventofcode.com/2020/day/$day/input")
 url.openConnection().run {
     setRequestProperty("Cookie", cookie)
     val fis = BufferedInputStream(getInputStream())
-    val path = Paths.get("src/test/resources/day$day.txt")
+    val path = Paths.get("src/commonTest/resources/day$day.txt")
     Files.copy(fis, path)
 }
