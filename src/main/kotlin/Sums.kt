@@ -13,5 +13,3 @@ fun List<Int>.allTriples(): List<Triple<Int, Int, Int>> = flatMapIndexed { i, a 
         }
     }
 }
-
-fun String.parseInts(): List<Int> = split("\n").map(String::toInt)

@@ -12,5 +12,3 @@ data class Password(val range: IntRange, val letter: Char, val password: String)
         }
     }
 }
-
-fun String.parsePasswords(): List<Password> = split("\n").map { Password.parse(it) }

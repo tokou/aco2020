@@ -16,5 +16,3 @@ data class Seat(val position: Pair<Int, Int>) {
         }
     }
 }
-
-fun String.seats() = split("\n").map { Seat.encoded(it) }
