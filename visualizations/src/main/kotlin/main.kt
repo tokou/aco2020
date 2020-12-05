@@ -9,7 +9,8 @@ import org.w3c.dom.HTMLElement
 fun main() {
     window.onload = {
         document.body?.append {
-            buildHeader(emptyList())
+            val menu = listOf("SkiFree" to ::showSkiFree)
+            buildHeader(menu)
             buildMain("Hello, JS!")
         }
     }
