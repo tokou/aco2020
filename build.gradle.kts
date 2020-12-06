@@ -18,11 +18,9 @@ kotlin {
         }
         withJava()
     }
-    js(LEGACY) {
+    js(IR) {
         browser {
-            binaries.executable()
             testTask {
-                isEnabled = false // Disable JS tests until we find a way to load test resources
                 useKarma {
                     useChromeHeadless()
                 }
