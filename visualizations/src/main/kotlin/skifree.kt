@@ -1,14 +1,13 @@
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.html.dom.append
-import kotlinx.html.id
 import kotlinx.html.js.h2
 import kotlinx.html.js.p
 import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.math.roundToInt
 
-val input = """
+private val input = """
     ..##.......
     #...#...#..
     .#....#..#.
@@ -32,7 +31,7 @@ fun showSkiFree() {
     Loop.start()
 }
 
-object Params {
+private object Params {
     const val fpsLimit = 60
     const val framesPerStep = 30
     val unit = 28 to 32
@@ -41,7 +40,7 @@ object Params {
     const val monsterDelay = 5
 }
 
-object State {
+private object State {
     var run = true
     var step = 0
     var treesHit = 0
@@ -66,7 +65,7 @@ object State {
     }
 }
 
-object Game {
+private object Game {
     private val origin = 6 to 5
     private val slope = 3 to 1
     private val forest = Forest.parse(input)
@@ -98,7 +97,7 @@ object Game {
     private fun Pair<Int, Int>.treePosition(progress: Double) = Params.unit * (this - progress * slope)
 }
 
-object Loop {
+private object Loop {
 
     private var frames = 0
     private var lastRender = 0.0
@@ -132,7 +131,7 @@ object Loop {
     }
 }
 
-object Images {
+private object Images {
 
     var treeReady = false
     val treeImage = Image().apply {
@@ -166,7 +165,7 @@ object Images {
 
 }
 
-object Graphics {
+private object Graphics {
 
     val canvas = (document.createElement("canvas") as HTMLCanvasElement).apply {
         width = Params.size.first * Params.unit.first
