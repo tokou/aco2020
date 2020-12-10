@@ -9,6 +9,17 @@ fun List<Int>.differenceInJolts(): Pair<Int, Int> {
 }
 
 fun List<Int>.countArrangements(): Long {
+    // This looks like Pascal's triangle
+    // Find a generalized formula someday
+    fun countPermutations(length: Int) = when (length) {
+        2 -> 1 + 1
+        3 -> 1 + 2 + 1
+        4 -> 1 + 3 + 3
+        5 -> 1 + 4 + 6 + 2
+        6 -> 1 + 5 + 10 + 6 + 1
+        else -> error("cannot compute length of $length")
+    }
+
     val s = listOf(0) + sorted() + listOf(maxOrNull()!! + 3)
     val diffs = s.zipWithNext().map { it.second - it.first }
     val i = diffs.joinToString("")
@@ -19,69 +30,24 @@ fun List<Int>.countArrangements(): Long {
     return i.fold(1L) { acc, e -> acc * e }
 }
 
-// [2]
-// 1, 1
-// 2
-// [3]
-// 1, 1, 1
-// 2, 1
-// 1, 2
-// 3
-// [4]
-// 1, 1, 1, 1
-// 2, 1, 1
-// 1, 2, 1
-// 1, 1, 2
-// 2, 2
-// 3, 1
-// 1, 3
-// [5]
-// 1, 1, 1, 1, 1
-// 2, 1, 1, 1
-// 1, 2, 1, 1
-// 1, 1, 2, 1
-// 1, 1, 1, 2
-// 3, 1, 1
-// 1, 3, 1
-// 1, 1, 3
-// 2, 2, 1
-// 2, 1, 2
-// 1, 2, 2
-// 3, 2
-// 2, 3
-// [6]
-// 1, 1, 1, 1, 1, 1
-// 2, 1, 1, 1, 1
-// 1, 2, 1, 1, 1
-// 1, 1, 2, 1, 1
-// 1, 1, 1, 2, 1
-// 1, 1, 1, 1, 2
-// 3, 1, 1, 1
-// 1, 3, 1, 1
-// 1, 1, 3, 1
-// 1, 1, 1, 3
-// 2, 2, 1, 1
-// 2, 1, 2, 1
-// 2, 1, 1, 2
-// 1, 2, 2, 1
-// 1, 2, 1, 2
-// 1, 1, 2, 2
-// 3, 2, 1
-// 3, 1, 2
-// 1, 3, 2
-// 2, 3, 1
-// 1, 2, 3
-// 2, 1, 3
-// 3, 3
-// This looks like Pascal's triangle
-// Find a generalized formula someday
-private fun countPermutations(length: Int) = when (length) {
-    2 -> 1 + 1
-    3 -> 1 + 2 + 1
-    4 -> 1 + 3 + 3
-    5 -> 1 + 4 + 6 + 2
-    6 -> 1 + 5 + 10 + 6 + 1
-    else -> error("cannot compute length of $length")
+fun List<Int>.countArrangementsDp(): Long {
+    val s = listOf(0) + sorted() + listOf(maxOrNull()!! + 3)
+
+    val visited = mutableMapOf<Int, Long>()
+    fun List<Int>.dp(i: Int): Long = when {
+        i == lastIndex -> 1
+        visited.contains(i) -> visited[i]!!
+        else -> {
+            var ans = 0L
+            for (j in (i + 1)..minOf(lastIndex, i + 4)) {
+                if (get(j) - get(i) <= 3) ans += dp(j)
+            }
+            visited[i] = ans
+            ans
+        }
+    }
+
+    return s.dp(0)
 }
 
 class Day10Tests {
@@ -149,5 +115,6 @@ class Day10Tests {
         val joltsDiff = jolts.differenceInJolts()
         assertEquals(1856, joltsDiff.first * joltsDiff.second)
         assertEquals(2314037239808, jolts.countArrangements())
+        assertEquals(2314037239808, jolts.countArrangementsDp())
     }
 }
